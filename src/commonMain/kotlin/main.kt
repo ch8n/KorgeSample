@@ -19,10 +19,10 @@ suspend fun main() = Korge(
     val height = views.virtualHeight
     val width = views.virtualWidth
     val circle = circle(radius = 25.0, fill = Colors.PINK).xy(height / 2, width / 2)
-    val leftText = text(text = "LEFT", textSize = 10.0, color = Colors.RED)
-    val rightText = text(text = "LEFT", textSize = 10.0, color = Colors.BLUE)
-    val upText = text(text = "LEFT", textSize = 10.0, color = Colors.GREEN)
-    val downText = text(text = "LEFT", textSize = 10.0, color = Colors.AQUA)
+    val leftText = text(text = "left", textSize = 100.0, color = Colors.RED).xy(100,100)
+    val rightText = text(text = "right", textSize = 100.0, color = Colors.BLUE).xy(10+leftText.x,100+leftText.y)
+    val upText = text(text = "up", textSize = 100.0, color = Colors.GREEN).xy(10+rightText.x,100+rightText.y)
+    val downText = text(text = "down", textSize = 100.0, color = Colors.AQUA).xy(10+upText.x,100+upText.y)
 
 
     addFixedUpdater(30.timesPerSecond) {
