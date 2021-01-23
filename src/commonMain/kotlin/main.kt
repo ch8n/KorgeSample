@@ -1,13 +1,9 @@
 import com.soywiz.klock.timesPerSecond
 import com.soywiz.korev.Key
-import com.soywiz.korev.KeyEvent
 import com.soywiz.korge.Korge
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
-import com.soywiz.korim.font.readBitmapFont
-import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korui.layout.MathEx
 
 suspend fun main() = Korge(
         title = "Korge_Sample",
@@ -18,52 +14,62 @@ suspend fun main() = Korge(
 
     val height = views.virtualHeight
     val width = views.virtualWidth
-    val circle = circle(radius = 25.0, fill = Colors.PINK).xy(height / 2, width / 2)
-    val leftText = text(text = "left", textSize = 100.0, color = Colors.RED).xy(100,100)
-    val rightText = text(text = "right", textSize = 100.0, color = Colors.BLUE).xy(10+leftText.x,100+leftText.y)
-    val upText = text(text = "up", textSize = 100.0, color = Colors.GREEN).xy(10+rightText.x,100+rightText.y)
-    val downText = text(text = "down", textSize = 100.0, color = Colors.AQUA).xy(10+upText.x,100+upText.y)
+
+
+    val player = circle(radius = 25.0, fill = Colors.PINK).xy(height / 2, width / 2)
+    val leftText = text(text = "left", textSize = 100.0, color = Colors.RED).xy(100, 100)
+
+    val rightText = text(text = "right", textSize = 100.0, color = Colors.BLUE).xy(leftText.x, 100 + leftText.y)
+
+    val upText = text(text = "up", textSize = 100.0, color = Colors.GREEN).xy(rightText.x, 100 + rightText.y)
+    val downText = text(text = "down", textSize = 100.0, color = Colors.AQUA).xy(upText.x, 100 + upText.y)
 
 
     addFixedUpdater(30.timesPerSecond) {
+
+        player.onCollision({ it == leftText }) {
+
+        }
+
         when {
+
             views.input.keys[Key.UP] && views.input.keys[Key.LEFT] -> {
-                circle.color = Colors.BLUEVIOLET
-                circle.xy(circle.x - 1, circle.y - 1)
+                player.color = Colors.BLUEVIOLET
+                player.xy(player.x - 1, player.y - 1)
             }
 
             views.input.keys[Key.UP] && views.input.keys[Key.RIGHT] -> {
-                circle.color = Colors.GREENYELLOW
-                circle.xy(circle.x + 1, circle.y - 1)
+                player.color = Colors.GREENYELLOW
+                player.xy(player.x + 1, player.y - 1)
             }
 
             views.input.keys[Key.DOWN] && views.input.keys[Key.RIGHT] -> {
-                circle.color = Colors.HOTPINK
-                circle.xy(circle.x + 1, circle.y + 1)
+                player.color = Colors.HOTPINK
+                player.xy(player.x + 1, player.y + 1)
             }
 
             views.input.keys[Key.DOWN] && views.input.keys[Key.LEFT] -> {
-                circle.color = Colors.TAN
-                circle.xy(circle.x - 1, circle.y + 1)
+                player.color = Colors.TAN
+                player.xy(player.x - 1, player.y + 1)
             }
 
             views.input.keys[Key.UP] -> {
-                circle.color = upText.color
-                circle.y -= 1
+                player.color = upText.color
+                player.y -= 1
             }
             views.input.keys[Key.DOWN] -> {
-                circle.color = downText.color
-                circle.y += 1
+                player.color = downText.color
+                player.y += 1
             }
             views.input.keys[Key.LEFT] -> {
-                circle.color = leftText.color
-                circle.x -= 1
+                player.color = leftText.color
+                player.x -= 1
             }
             views.input.keys[Key.RIGHT] -> {
-                circle.color = rightText.color
-                circle.x += 1
+                player.color = rightText.color
+                player.x += 1
             }
-            else -> circle.color = Colors.PINK
+            else -> player.color = Colors.PINK
         }
     }
 
