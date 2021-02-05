@@ -5,10 +5,8 @@ import com.soywiz.korev.Key
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.scene.sceneContainer
-import com.soywiz.korge.ui.uiButton
 import com.soywiz.korge.ui.uiTextButton
 import com.soywiz.korge.view.*
-import com.soywiz.korim.color.Colors
 import com.soywiz.korio.async.launchImmediately
 
 
@@ -55,11 +53,34 @@ class GameScene : Scene() {
     override suspend fun Container.sceneInit(): Unit {
         sceneContainer(name = "game", views = views) {
             val mainText = text(text = "This is $name scene container").centerOnStage()
-            val player = circle(radius = 25.0, fill = Colors.PINK) {
+//            val player = circle(radius = 25.0, fill = Colors.PINK) {
+//                alignTopToBottomOf(mainText)
+//                alignLeftToLeftOf(mainText)
+//                alignRightToRightOf(mainText)
+//            }
+
+//            camera() {
+//                setTo(player)
+//                setSize(200.0, 200.0)
+//            }
+
+
+            val animIdle = Animations.Player.Gary.getIdleAnim()
+            val animWalkLeft = Animations.Player.Gary.getWalkLeftAnim()
+            val animWalkRight = Animations.Player.Gary.getWalkRightAnim()
+            val animWalkUp = Animations.Player.Gary.getWalkUpAnim()
+            val animWalkDown = Animations.Player.Gary.getWalkDownAnim()
+
+
+            val player = sprite(initialAnimation = animIdle) {
+                centerOnStage()
+                playAnimationLooped()
                 alignTopToBottomOf(mainText)
                 alignLeftToLeftOf(mainText)
                 alignRightToRightOf(mainText)
             }
+
+
 
 
             addFixedUpdater(60.timesPerSecond) {
@@ -67,41 +88,42 @@ class GameScene : Scene() {
                 when {
 
                     views.input.keys[Key.UP] && views.input.keys[Key.LEFT] -> {
-                        player.color = Colors.BLUEVIOLET
+                        player.playAnimationLooped(spriteAnimation = animWalkLeft)
                         player.xy(player.x - 1, player.y - 1)
                     }
 
                     views.input.keys[Key.UP] && views.input.keys[Key.RIGHT] -> {
-                        player.color = Colors.GREENYELLOW
+                        player.playAnimationLooped(spriteAnimation = animWalkRight)
                         player.xy(player.x + 1, player.y - 1)
                     }
 
                     views.input.keys[Key.DOWN] && views.input.keys[Key.RIGHT] -> {
-                        player.color = Colors.HOTPINK
+                        player.playAnimationLooped(spriteAnimation = animWalkDown)
                         player.xy(player.x + 1, player.y + 1)
                     }
 
                     views.input.keys[Key.DOWN] && views.input.keys[Key.LEFT] -> {
-                        player.color = Colors.TAN
+                        player.playAnimationLooped(spriteAnimation = animWalkDown)
                         player.xy(player.x - 1, player.y + 1)
                     }
 
                     views.input.keys[Key.UP] -> {
-                        player.color = Colors.DARKCYAN
+                        player.playAnimationLooped(spriteAnimation = animWalkUp)
                         player.y -= 1
                     }
                     views.input.keys[Key.DOWN] -> {
-                        player.color = Colors.DARKCYAN
+                        player.playAnimationLooped(spriteAnimation = animWalkDown)
                         player.y += 1
                     }
                     views.input.keys[Key.LEFT] -> {
-                        player.color = Colors.DARKCYAN
+                        player.playAnimationLooped(spriteAnimation = animWalkLeft)
                         player.x -= 1
                     }
                     views.input.keys[Key.RIGHT] -> {
-                        player.color = Colors.DARKCYAN
+                        player.playAnimationLooped(spriteAnimation = animWalkRight)
                         player.x += 1
                     }
+                    else -> player.playAnimationLooped(spriteAnimation = animIdle)
                 }
             }
         }
