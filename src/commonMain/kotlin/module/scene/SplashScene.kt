@@ -52,7 +52,7 @@ class MainMenuScene : Scene() {
 class GameScene : Scene() {
     override suspend fun Container.sceneInit(): Unit {
         sceneContainer(name = "game", views = views) {
-            val mainText = text(text = "This is $name scene container").centerOnStage()
+            val mainText = text(text = "Big-Brain-Time",textSize = 32.toDouble()).centerOnStage()
 //            val player = circle(radius = 25.0, fill = Colors.PINK) {
 //                alignTopToBottomOf(mainText)
 //                alignLeftToLeftOf(mainText)
