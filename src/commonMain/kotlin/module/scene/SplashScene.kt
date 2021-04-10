@@ -8,69 +8,25 @@ import com.soywiz.korge.scene.sceneContainer
 import com.soywiz.korge.ui.uiTextButton
 import com.soywiz.korge.view.*
 import com.soywiz.korio.async.launchImmediately
+import Animations.Player.Gary
+import Animations.Player.Motion
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.single
 
-
-class SplashScene : Scene() {
-    override suspend fun Container.sceneInit(): Unit {
-        sceneContainer(name = "splash", views = views) {
-            val mainText = text(text = "This is $name scene container").centerOnStage()
-            val menuBtn = uiTextButton(text = "change scene") {
-                alignTopToBottomOf(mainText)
-                alignLeftToLeftOf(mainText)
-                onClick {
-                    launchImmediately { sceneContainer.changeTo<MainMenuScene>() }
-                }
-            }
-
-            uiTextButton(text = "go to game scene") {
-                alignTopToBottomOf(menuBtn)
-                alignLeftToLeftOf(menuBtn)
-                onClick {
-                    launchImmediately { sceneContainer.changeTo<GameScene>() }
-                }
-            }
-        }
-    }
-}
-
-
-class MainMenuScene : Scene() {
-    override suspend fun Container.sceneInit(): Unit {
-        sceneContainer(name = "main_menu", views = views) {
-            val mainText = text(text = "This is $name scene container").centerOnStage()
-            uiTextButton(text = "go to game scene") {
-                alignTopToBottomOf(mainText)
-                alignLeftToLeftOf(mainText)
-                onClick {
-                    launchImmediately { sceneContainer.changeTo<GameScene>() }
-                }
-            }
-        }
-    }
-}
 
 class GameScene : Scene() {
+
     override suspend fun Container.sceneInit(): Unit {
         sceneContainer(name = "game", views = views) {
-            val mainText = text(text = "Big-Brain-Time",textSize = 32.toDouble()).centerOnStage()
-//            val player = circle(radius = 25.0, fill = Colors.PINK) {
-//                alignTopToBottomOf(mainText)
-//                alignLeftToLeftOf(mainText)
-//                alignRightToRightOf(mainText)
-//            }
 
-//            camera() {
-//                setTo(player)
-//                setSize(200.0, 200.0)
-//            }
+            val animations = Gary.spriteAnimations.single()
+            val animIdle = requireNotNull(animations[Motion.Idle])
+            val animWalkLeft = requireNotNull(animations[Motion.Left])
+            val animWalkRight = requireNotNull(animations[Motion.Right])
+            val animWalkUp = requireNotNull(animations[Motion.Up])
+            val animWalkDown = requireNotNull(animations[Motion.Down])
 
-
-            val animIdle = Animations.Player.Gary.getIdleAnim()
-            val animWalkLeft = Animations.Player.Gary.getWalkLeftAnim()
-            val animWalkRight = Animations.Player.Gary.getWalkRightAnim()
-            val animWalkUp = Animations.Player.Gary.getWalkUpAnim()
-            val animWalkDown = Animations.Player.Gary.getWalkDownAnim()
-
+            val mainText = text(text = "Big-Brain-Time", textSize = 32.toDouble()).centerOnStage()
 
             val player = sprite(initialAnimation = animIdle) {
                 centerOnStage()
@@ -79,9 +35,6 @@ class GameScene : Scene() {
                 alignLeftToLeftOf(mainText)
                 alignRightToRightOf(mainText)
             }
-
-
-
 
             addFixedUpdater(60.timesPerSecond) {
 
